@@ -7,7 +7,7 @@
 // 您可以將 image 的網址換成您電腦裡的圖片路徑或真實網址
 const chiikawaChars = [
     { id: 'chiikawa', name: '小可愛', color: '#FFFFFF', image: 'https://placehold.co/100x100/FFFFFF/FF69B4?text=小可愛' }, // 白底粉字
-    { id: 'hachi', name: '小八', color: '#87CEEB', image: 'https://pbs.twimg.com/media/GbQ6Lf9akAAr4Yp?format=jpg&name=medium' },    // 藍底白字
+    { id: 'hachi', name: '小八', color: '#87CEEB', image: 'https://www.popdaily.com.tw/shaper/u/202409/fd4138c3-7bc4-483e-b54d-06d493792db6.png?resize-w=1300&resize-h=1300&format=webp' },    // 藍底白字
     { id: 'usagi', name: '兔兔', color: '#FFFACD', image: 'https://placehold.co/100x100/FFFACD/DAA520?text=兔兔' },    // 黃底金字
     { id: 'momonga', name: '小桃', color: '#E0FFFF', image: 'https://placehold.co/100x100/E0FFFF/008080?text=小桃' },   // 淺青底
     { id: 'kurimanju', name: '栗子', color: '#DEB887', image: 'https://placehold.co/100x100/DEB887/8B4513?text=栗子' },  // 栗色
