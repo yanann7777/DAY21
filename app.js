@@ -1,0 +1,224 @@
+// ==========================================
+// 1. 吉伊卡哇角色與美食資料
+// ==========================================
+
+// 角色列表 (使用不同底色代表該角色)
+// 為了避免版權圖連結失效，這裡使用 Placehold.co 生成對應顏色的示意圖
+// 您可以將 image 的網址換成您電腦裡的圖片路徑或真實網址
+const chiikawaChars = [
+    { id: 'chiikawa', name: '小可愛', color: '#FFFFFF', image: 'https://placehold.co/100x100/FFFFFF/FF69B4?text=小可愛' }, // 白底粉字
+    { id: 'hachi', name: '小八', color: '#87CEEB', image: 'https://placehold.co/100x100/87CEEB/FFFFFF?text=小八' },    // 藍底白字
+    { id: 'usagi', name: '兔兔', color: '#FFFACD', image: 'https://placehold.co/100x100/FFFACD/DAA520?text=兔兔' },    // 黃底金字
+    { id: 'momonga', name: '小桃', color: '#E0FFFF', image: 'https://placehold.co/100x100/E0FFFF/008080?text=小桃' },   // 淺青底
+    { id: 'kurimanju', name: '栗子', color: '#DEB887', image: 'https://placehold.co/100x100/DEB887/8B4513?text=栗子' },  // 栗色
+    { id: 'rakko', name: '海獺', color: '#8B4513', image: 'https://placehold.co/100x100/8B4513/FFFFFF?text=海獺' },    // 深褐底
+    { id: 'anoko', name: '那孩子', color: '#D3D3D3', image: 'https://placehold.co/100x100/D3D3D3/000000?text=那孩子' }   // 灰底
+];
+
+const poolSSR = [
+    "頂級和牛丼飯", "龍蝦沙拉三明治", "蒲燒鰻魚飯定食", "松露野菇燉飯", 
+    "特級海陸大餐", "Prime等級牛排飯", "豪華綜合生魚片丼"
+];
+const poolSR = [
+    "日式鹽烤鯖魚", "舒肥雞胸肉波基碗", "泰式打拋豬(正宗)", "花雕雞腿定食",
+    "清蒸鱸魚套餐", "紅燒牛腱飯", "日式炸豬排(腰內肉)", "鮭魚排佐時蔬",
+    "韓式石鍋拌飯", "越式生牛肉河粉", "香煎干貝義大利麵", "海南雞飯(腿肉)"
+];
+const poolN = [
+    "便利商店: 雞胸肉組合", "便利商店: 鮪魚飯糰", "傻瓜乾麵", "水餃10顆",
+    "榨菜肉絲麵", "陽春麵+滷蛋", "潤餅", "Subway 6吋潛艇堡",
+    "雞肉飯便當", "排骨飯", "蛋炒飯", "皮蛋瘦肉粥",
+    "麻醬麵", "控肉飯", "米粉湯+黑白切", "關東煮組合",
+    "肉圓+貢丸湯", "大腸包小腸", "涼麵+味噌湯", "自助餐(三菜一肉)"
+];
+
+// ==========================================
+// 2. 初始化與變數
+// ==========================================
+const drawBtn = document.getElementById('drawBtn');
+const clearBtn = document.getElementById('clearBtn');
+const resultBody = document.getElementById('resultBody');
+const overlay = document.getElementById('gachaOverlay');
+const avatarGrid = document.getElementById('avatarGrid');
+const STORAGE_KEY = 'gacha_lunch_chiikawa_v1';
+
+// 頁面載入執行
+window.addEventListener('load', () => {
+    initAvatars(); // 產生頭貼選項
+    loadHistory(); // 載入歷史紀錄
+});
+
+// ==========================================
+// 3. 頭貼選擇邏輯
+// ==========================================
+function initAvatars() {
+    avatarGrid.innerHTML = '';
+    chiikawaChars.forEach((char, index) => {
+        const img = document.createElement('img');
+        img.src = char.image;
+        img.className = 'avatar-option';
+        img.title = char.name; // 滑鼠懸停顯示名字
+        
+        // 預設選中第一個
+        if (index === 0) {
+            img.classList.add('selected');
+            document.getElementById('selectedAvatar').value = char.image;
+        }
+
+        // 點擊事件
+        img.addEventListener('click', () => {
+            // 移除其他人的 selected 樣式
+            document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+            // 自己加上 selected
+            img.classList.add('selected');
+            // 更新隱藏欄位的值
+            document.getElementById('selectedAvatar').value = char.image;
+        });
+
+        avatarGrid.appendChild(img);
+    });
+}
+
+// ==========================================
+// 4. 轉蛋功能函式
+// ==========================================
+function startGacha() {
+    const nameInput = document.getElementById('username').value;
+    const genderInput = document.querySelector('input[name="gender"]:checked');
+    const avatarSrc = document.getElementById('selectedAvatar').value;
+
+    if (nameInput.trim() === "") {
+        alert("請輸入召喚師名字！");
+        return;
+    }
+
+    // 鎖定 UI
+    drawBtn.disabled = true;
+    overlay.classList.remove('hidden');
+    
+    // 機率判定
+    const rand = Math.random() * 100;
+    let selectedFood = "", selectedRarity = "";
+
+    if (rand >= 95) { 
+        selectedRarity = "SSR"; selectedFood = poolSSR[Math.floor(Math.random() * poolSSR.length)];
+    } else if (rand >= 70) { 
+        selectedRarity = "SR"; selectedFood = poolSR[Math.floor(Math.random() * poolSR.length)];
+    } else {
+        selectedRarity = "N"; selectedFood = poolN[Math.floor(Math.random() * poolN.length)];
+    }
+
+    // 動畫等待
+    setTimeout(() => {
+        overlay.classList.add('hidden');
+        drawBtn.disabled = false;
+        
+        handleData(nameInput, genderInput.value, avatarSrc, selectedRarity, selectedFood);
+    }, 2000);
+}
+
+// ==========================================
+// 5. 資料處理與渲染
+// ==========================================
+function handleData(name, gender, avatar, rarity, food) {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    
+    const dateStr = `${tomorrow.getFullYear()}/${(tomorrow.getMonth()+1).toString().padStart(2,'0')}/${tomorrow.getDate().toString().padStart(2,'0')}`;
+    const days = ['日', '一', '二', '三', '四', '五', '六'];
+    const fullDateStr = `${dateStr} (週${days[tomorrow.getDay()]})`;
+
+    const newRecord = {
+        rarity: rarity,
+        fullDate: fullDateStr,
+        username: name,
+        gender: gender, // 新欄位: 性別
+        avatar: avatar, // 新欄位: 頭貼圖片網址
+        food: food
+    };
+
+    saveToStorage(newRecord);
+    loadHistory();
+}
+
+function saveToStorage(newRecord) {
+    let history = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    history.unshift(newRecord);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+}
+
+function loadHistory() {
+    const savedData = localStorage.getItem(STORAGE_KEY);
+    resultBody.innerHTML = ''; 
+
+    if (savedData) {
+        const arr = JSON.parse(savedData);
+        if (arr.length > 0) {
+            
+            let lastDate = null;
+            let lastName = null;
+
+            arr.forEach(record => {
+                const row = document.createElement('tr');
+                
+                // 視覺優化: 重複日期/名字留白
+                let displayDate = record.fullDate;
+                let displayName = record.username;
+                let displayAvatar = `<img src="${record.avatar}" class="table-avatar">`; // 預設顯示圖片
+
+                if (record.fullDate === lastDate) {
+                    displayDate = "";
+                }
+
+                // 如果日期相同且名字相同，名字和頭貼都隱藏
+                if (record.username === lastName && record.fullDate === lastDate) {
+                    displayName = "";
+                    displayAvatar = ""; 
+                }
+
+                lastDate = record.fullDate;
+                lastName = record.username;
+
+                // 性別符號
+                let genderIcon = "";
+                if(record.gender === "boy") genderIcon = "♂️";
+                else if(record.gender === "girl") genderIcon = "♀️";
+                else genderIcon = "🌈";
+
+                // 稀有度與樣式
+                const rarityBadge = `<span class="tag tag-${record.rarity}">${record.rarity}</span>`;
+                let foodStyle = "";
+                if (record.rarity === "SSR") foodStyle = "color: #ff69b4; font-weight:800; text-shadow: 1px 1px 0 #fff;";
+                else if (record.rarity === "SR") foodStyle = "color: #ff9f43; font-weight:800;";
+
+                // 組合 HTML (新增了頭貼欄位)
+                row.innerHTML = `
+                    <td>${displayAvatar}</td>
+                    <td>${rarityBadge}</td>
+                    <td>${displayDate}</td>
+                    <td>${displayName} ${displayName ? genderIcon : ''}</td>
+                    <td style="${foodStyle}">${record.food}</td>
+                `;
+                
+                resultBody.appendChild(row);
+            });
+            
+            // 加上新資料動畫
+            const firstRow = resultBody.querySelector('tr');
+            if(firstRow) firstRow.classList.add('new-row');
+            return;
+        }
+    }
+    
+    resultBody.innerHTML = '<tr id="placeholderRow"><td colspan="5" class="empty-state">還沒有召喚紀錄捏... ( •̀ ω •́ )✧</td></tr>';
+}
+
+clearBtn.addEventListener('click', () => {
+    if(confirm("確定要清除本本嗎？")) {
+        localStorage.removeItem(STORAGE_KEY);
+        loadHistory();
+    }
+});
+
+drawBtn.addEventListener('click', startGacha);

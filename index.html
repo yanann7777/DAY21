@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>吉伊卡哇午餐轉蛋</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="gachaOverlay" class="hidden">
+        <div class="gacha-container">
+            <div id="gachaOrb" class="orb"></div>
+            <div id="gachaText" class="gacha-text"></div>
+        </div>
+    </div>
+
+    <div class="container main-box">
+        <h1>🍮 吉伊卡哇午餐轉蛋機 ✨</h1>
+        
+        <div class="control-panel deco-box">
+            
+            <div class="selection-row">
+                <label class="section-label">⚧️ 請問您的性別：</label>
+                <div class="gender-group">
+                    <label class="gender-option">
+                        <input type="radio" name="gender" value="boy" checked>
+                        <span class="gender-btn boy">👦 男生</span>
+                    </label>
+                    <label class="gender-option">
+                        <input type="radio" name="gender" value="girl">
+                        <span class="gender-btn girl">👧 女生</span>
+                    </label>
+                    <label class="gender-option">
+                        <input type="radio" name="gender" value="other">
+                        <span class="gender-btn other">🌈 其他</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="selection-row">
+                <label class="section-label">🐹 選擇今日心情角色：</label>
+                <div id="avatarGrid" class="avatar-grid">
+                    </div>
+                <input type="hidden" id="selectedAvatar" value="">
+            </div>
+
+            <div class="input-group">
+                <label for="username">🌟 召喚師名字：</label>
+                <input type="text" id="username" placeholder="輸入名字...">
+            </div>
+            
+            <div class="btn-group">
+                <button id="drawBtn" class="btn-primary btn-bubble">💖 進行午餐召喚</button>
+                <button id="clearBtn" class="btn-secondary btn-bubble">🧹 清除紀錄</button>
+            </div>
+        </div>
+
+        <div class="table-container deco-box">
+            <h3>🎀 召喚紀錄小本本</h3>
+            <table id="resultTable">
+                <thead>
+                    <tr>
+                        <th width="10%">頭貼</th> <th width="15%">稀有度</th>
+                        <th width="25%">預計用餐日</th>
+                        <th width="15%">使用者</th>
+                        <th width="35%">美食名稱</th>
+                    </tr>
+                </thead>
+                <tbody id="resultBody">
+                    <tr id="placeholderRow">
+                        <td colspan="5" class="empty-state">還沒有召喚紀錄捏... ( •̀ ω •́ )✧</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
