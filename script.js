@@ -9,10 +9,10 @@ const chiikawaChars = [
     { id: 'chiikawa', name: '小可愛', color: '#FFFFFF', image: 'https://placehold.co/100x100/FFFFFF/FF69B4?text=小可愛' }, // 白底粉字
     { id: 'hachi', name: '小八', color: '#87CEEB', image: 'https://www.popdaily.com.tw/shaper/u/202409/fd4138c3-7bc4-483e-b54d-06d493792db6.png?resize-w=1300&resize-h=1300&format=webp' },    // 藍底白字
     { id: 'usagi', name: '兔兔', color: '#FFFACD', image: 'https://www.popdaily.com.tw/shaper/u/202409/f7984971-9f2d-4ccf-963f-7cc7acfec817.png?resize-w=1300&resize-h=1300&format=webp' },    // 黃底金字
-    { id: 'momonga', name: '小桃', color: '#E0FFFF', image: 'https://placehold.co/100x100/E0FFFF/008080?text=小桃' },   // 淺青底
-    { id: 'kurimanju', name: '栗子', color: '#DEB887', image: 'https://placehold.co/100x100/DEB887/8B4513?text=栗子' },  // 栗色
-    { id: 'rakko', name: '海獺', color: '#8B4513', image: 'https://placehold.co/100x100/8B4513/FFFFFF?text=海獺' },    // 深褐底
-    { id: 'anoko', name: '那孩子', color: '#D3D3D3', image: 'https://placehold.co/100x100/D3D3D3/000000?text=那孩子' }   // 灰底
+    { id: 'momonga', name: '小桃', color: '#E0FFFF', image: 'https://www.popdaily.com.tw/shaper/u/202409/9fd5d003-ac74-4eca-b6b0-5817e26ebc4c.png?resize-w=1300&resize-h=1300&format=webp' },   // 淺青底
+    { id: 'kurimanju', name: '栗子', color: '#DEB887', image: 'https://www.popdaily.com.tw/shaper/u/202409/c165f1b6-31ec-4d58-b6be-aae4a912499b.png?resize-w=1300&resize-h=1300&format=webp' },  // 栗色
+    { id: 'rakko', name: '海獺', color: '#8B4513', image: 'https://www.popdaily.com.tw/shaper/u/202409/f37ba11a-92ae-4d3f-9f82-4aa947c35421.png?resize-w=1300&resize-h=1300&format=webp' },    // 深褐底
+    { id: 'anoko', name: '那孩子', color: '#D3D3D3', image: 'https://www.popdaily.com.tw/shaper/u/202409/b2664bda-46c6-4506-9a9d-ef214a7da9da.png?resize-w=1300&resize-h=1300&format=webp' }   // 灰底
 ];
 
 const poolSSR = [
