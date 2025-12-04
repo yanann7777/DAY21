@@ -1,5 +1,5 @@
 /* =========================================
-   吉伊卡哇軟萌風格 CSS (RWD 響應式版)
+   吉伊卡哇軟萌風格 CSS (完整修復版)
    ========================================= */
 
 :root {
@@ -30,15 +30,14 @@ body {
     background-position: -2px -2px;
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* 讓內容在長頁面時從頂部開始 */
+    align-items: flex-start;
     padding: 30px 15px;
     margin: 0;
-    min-height: 100vh; /* 確保背景至少填滿視窗高度 */
+    min-height: 100vh;
     color: var(--text-dark);
-    box-sizing: border-box; /* 確保 padding 不會撐破寬度 */
+    box-sizing: border-box;
 }
 
-/* 讓所有元素都繼承 box-sizing */
 *, *::before, *::after {
     box-sizing: inherit;
 }
@@ -51,7 +50,7 @@ body {
     box-shadow: 0 10px 25px rgba(255, 206, 230, 0.5);
     width: 100%;
     max-width: 850px;
-    transition: padding 0.3s; /* 平滑過渡 */
+    transition: padding 0.3s;
 }
 
 h1 {
@@ -61,7 +60,7 @@ h1 {
     font-size: 2rem;
     margin-bottom: 1.5rem;
     text-shadow: 2px 2px 0px var(--soft-pink);
-    line-height: 1.4; /* 防止多行標題擠在一起 */
+    line-height: 1.4;
 }
 
 h3 {
@@ -81,10 +80,9 @@ h3 {
     padding: 25px;
     margin-bottom: 25px;
     border: 3px dashed var(--baby-blue);
-    width: 100%; /* 確保填滿容器 */
+    width: 100%;
 }
 
-/* --- 選擇區塊樣式 --- */
 .selection-row {
     margin-bottom: 20px;
     width: 100%;
@@ -99,12 +97,12 @@ h3 {
     font-size: 1.1rem;
 }
 
-/* --- 性別按鈕樣式 --- */
+/* 性別按鈕 */
 .gender-group {
     display: flex;
     justify-content: center;
     gap: 15px;
-    flex-wrap: wrap; /* 允許換行 */
+    flex-wrap: wrap;
 }
 
 .gender-option input { display: none; }
@@ -118,7 +116,7 @@ h3 {
     cursor: pointer;
     font-weight: 700;
     transition: 0.2s;
-    white-space: nowrap; /* 防止文字換行 */
+    white-space: nowrap;
 }
 
 .gender-option input:checked + .gender-btn {
@@ -130,26 +128,23 @@ h3 {
 .gender-option input:checked + .gender-btn.girl { border-color: #ff7675; background-color: #ffeaea; color: #d63031; }
 .gender-option input:checked + .gender-btn.other { border-color: #a29bfe; background-color: #f3f0ff; color: #6c5ce7; }
 
-/* --- 頭貼選擇網格 --- */
-/* --- 頭貼選擇網格 (含名字顯示版) --- */
+/* 頭貼選擇網格 */
 .avatar-grid {
     display: flex;
     justify-content: center;
     gap: 15px;
-    flex-wrap: wrap; /* 允許換行 */
+    flex-wrap: wrap;
 }
 
-/* 每一組頭貼的容器 (這是新增的！) */
 .avatar-wrapper {
     display: flex;
-    flex-direction: column; /* 垂直排列：圖在上、字在下 */
-    align-items: center;    /* 水平置中 */
+    flex-direction: column;
+    align-items: center;
     cursor: pointer;
-    width: 75px;            /* 設定固定寬度，讓排版整齊 */
+    width: 75px;
     transition: 0.2s;
 }
 
-/* 頭貼圖片 */
 .avatar-option {
     width: 60px;
     height: 60px;
@@ -160,26 +155,19 @@ h3 {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-/* 角色名字 (這是新增的！) */
 .avatar-name {
-    margin-top: 5px;       /* 與圖片的距離 */
+    margin-top: 5px;
     font-size: 0.9rem;
     color: var(--text-light);
     font-weight: 800;
     transition: 0.2s;
     text-align: center;
-    white-space: nowrap;   /* 防止名字換行 */
+    white-space: nowrap;
 }
 
-/* 滑鼠移過去的效果 */
-.avatar-wrapper:hover .avatar-option {
-    transform: translateY(-3px);
-}
-.avatar-wrapper:hover .avatar-name {
-    color: var(--text-dark);
-}
+.avatar-wrapper:hover .avatar-option { transform: translateY(-3px); }
+.avatar-wrapper:hover .avatar-name { color: var(--text-dark); }
 
-/* --- 選中狀態 (注意這裡改成了 wrapper) --- */
 .avatar-wrapper.selected .avatar-option {
     border-color: var(--soft-pink);
     transform: scale(1.15);
@@ -188,31 +176,11 @@ h3 {
 }
 
 .avatar-wrapper.selected .avatar-name {
-    color: #ff69b4; /* 選中時名字變粉紅色 */
+    color: #ff69b4;
     text-shadow: 1px 1px 0 #fff;
 }
 
-.avatar-option {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: 3px solid #fff;
-    cursor: pointer;
-    transition: 0.2s;
-    object-fit: cover;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.avatar-option:hover { transform: translateY(-3px); }
-
-.avatar-option.selected {
-    border-color: var(--soft-pink);
-    transform: scale(1.15);
-    box-shadow: 0 0 15px var(--soft-pink);
-    animation: bounce 0.5s;
-}
-
-/* --- 輸入框與按鈕 --- */
+/* 輸入框與按鈕 */
 .control-panel {
     display: flex;
     flex-direction: column;
@@ -230,8 +198,8 @@ input[type="text"] {
     border: 3px solid var(--soft-pink);
     border-radius: 30px;
     font-size: 1rem;
-    width: 100%;      /* 改為 100% */
-    max-width: 300px; /* 設定最大寬度 */
+    width: 100%;
+    max-width: 300px;
     text-align: center;
     outline: none;
     font-family: 'M PLUS Rounded 1c', sans-serif;
@@ -240,7 +208,7 @@ input[type="text"] {
 .btn-group { 
     display: flex; 
     gap: 15px; 
-    flex-wrap: wrap; /* 允許小螢幕換行 */
+    flex-wrap: wrap;
     justify-content: center;
     width: 100%;
 }
@@ -256,22 +224,22 @@ input[type="text"] {
     transition: 0.2s;
     font-family: 'M PLUS Rounded 1c', sans-serif;
     box-shadow: 0 4px 0 rgba(0,0,0,0.1);
-    min-width: 140px; /* 確保按鈕不會太小 */
+    min-width: 140px;
 }
 .btn-bubble:active { transform: translateY(4px); box-shadow: none; }
 .btn-primary { background-color: var(--soft-pink); }
 .btn-secondary { background-color: var(--mint-green); }
 
-/* --- 表格樣式 --- */
+/* 表格樣式 */
 .table-container { 
     text-align: center; 
-    overflow-x: auto; /* 允許水平捲動 */
-    -webkit-overflow-scrolling: touch; /* 讓手機捲動更順暢 */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 table { 
     width: 100%; 
-    min-width: 600px; /* 確保表格不會擠成一團，強制出現捲軸 */
+    min-width: 600px;
     border-collapse: separate; 
     border-spacing: 0 8px; 
     margin-top: 10px; 
@@ -309,7 +277,7 @@ td:last-child { border-radius: 0 20px 20px 0; border-right: 2px solid var(--bg-c
 .tag-SR { background-color: var(--tag-sr-bg); color: #dba934; }
 .tag-SSR { background: var(--tag-ssr-bg); color: #fff; animation: rainbow 2s infinite; text-shadow: 1px 1px 1px rgba(0,0,0,0.2); }
 
-/* --- 動畫設定 --- */
+/* 動畫設定 */
 #gachaOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(230, 220, 255, 0.9); z-index: 999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
 .hidden { display: none !important; }
 .orb { width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #fff, #ffcee6); border: 5px solid #fff; animation: shake 0.5s infinite; }
@@ -323,52 +291,49 @@ td:last-child { border-radius: 0 20px 20px 0; border-right: 2px solid var(--bg-c
 
 
 /* =========================================
-   📱 手機與平板 RWD 專用設定 (Media Queries)
+   📱 手機與平板 RWD 專用設定 (完整補完版)
    ========================================= */
 
-/* 平板尺寸 (寬度小於 768px) */
 @media screen and (max-width: 768px) {
     .container.main-box {
-        padding: 1.5rem; /* 減少內距 */
+        padding: 1.5rem;
         border-radius: 30px;
     }
-
-    h1 {
-        font-size: 1.6rem; /* 標題縮小 */
-    }
-
-    /* 頭貼網格縮小間距 */
-    .avatar-grid {
-        gap: 10px;
-    }
-    .avatar-option {
-        width: 50px;
-        height: 50px;
-    }
+    h1 { font-size: 1.6rem; }
+    .avatar-grid { gap: 10px; }
+    .avatar-wrapper { width: 65px; }
+    .avatar-option { width: 50px; height: 50px; }
 }
 
-/* 手機尺寸 (寬度小於 480px) */
-/* 手機尺寸 (寬度小於 480px) */
 @media screen and (max-width: 480px) {
+    body { padding: 10px; }
+    .container.main-box {
+        padding: 1.2rem;
+        border-width: 3px;
+    }
+    .deco-box { padding: 15px; }
+    h1 { font-size: 1.4rem; margin-bottom: 1rem; }
     
-    /* ... (前面的設定保留) ... */
-
-    /* 修改這裡：頭貼網格的手機版設定 */
-    .avatar-grid {
-        gap: 10px;
+    .btn-group {
+        flex-direction: column;
+        width: 100%;
+    }
+    .btn-bubble { width: 100%; }
+    
+    .gender-group { gap: 8px; }
+    .gender-btn {
+        padding: 6px 12px;
+        font-size: 0.9rem;
     }
     
-    /* 新增 wrapper 的縮放 */
-    .avatar-wrapper {
-        width: 60px; /* 手機版容器縮小 */
-    }
-
-    .avatar-option {
-        width: 50px; /* 圖片縮小 */
-        height: 50px;
-    }
+    input[type="text"] { width: 100%; max-width: none; }
     
-    .avatar-name {
-        font-size: 0.8rem; /* 字體縮小 */
-    }
+    th, td { padding: 10px 8px; font-size: 0.9rem; }
+    .table-avatar { width: 35px; height: 35px; }
+    
+    /* 這裡必須完整寫出，不能用省略 */
+    .avatar-grid { gap: 8px; }
+    .avatar-wrapper { width: 55px; }
+    .avatar-option { width: 45px; height: 45px; }
+    .avatar-name { font-size: 0.8rem; }
 }
