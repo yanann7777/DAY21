@@ -1,5 +1,5 @@
 /* =========================================
-   吉伊卡哇軟萌風格 CSS (完整修復版)
+   吉伊卡哇軟萌風格 CSS (RWD 無卷軸卡片版)
    ========================================= */
 
 :root {
@@ -230,16 +230,13 @@ input[type="text"] {
 .btn-primary { background-color: var(--soft-pink); }
 .btn-secondary { background-color: var(--mint-green); }
 
-/* 表格樣式 */
+/* 表格樣式 (電腦版預設) */
 .table-container { 
     text-align: center; 
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
 }
 
 table { 
     width: 100%; 
-    min-width: 600px;
     border-collapse: separate; 
     border-spacing: 0 8px; 
     margin-top: 10px; 
@@ -291,7 +288,7 @@ td:last-child { border-radius: 0 20px 20px 0; border-right: 2px solid var(--bg-c
 
 
 /* =========================================
-   📱 手機與平板 RWD 專用設定 (完整補完版)
+   📱 手機與平板 RWD 專用設定 (卡片模式版)
    ========================================= */
 
 @media screen and (max-width: 768px) {
@@ -305,35 +302,92 @@ td:last-child { border-radius: 0 20px 20px 0; border-right: 2px solid var(--bg-c
     .avatar-option { width: 50px; height: 50px; }
 }
 
-@media screen and (max-width: 480px) {
+/* 手機版：將表格轉為卡片，徹底消除左右卷軸 */
+@media screen and (max-width: 600px) {
     body { padding: 10px; }
-    .container.main-box {
-        padding: 1.2rem;
-        border-width: 3px;
-    }
+    .container.main-box { padding: 1.2rem; border-width: 3px; }
     .deco-box { padding: 15px; }
     h1 { font-size: 1.4rem; margin-bottom: 1rem; }
     
-    .btn-group {
-        flex-direction: column;
-        width: 100%;
-    }
+    .btn-group { flex-direction: column; width: 100%; }
     .btn-bubble { width: 100%; }
     
     .gender-group { gap: 8px; }
-    .gender-btn {
-        padding: 6px 12px;
-        font-size: 0.9rem;
-    }
-    
+    .gender-btn { padding: 6px 12px; font-size: 0.9rem; }
     input[type="text"] { width: 100%; max-width: none; }
     
-    th, td { padding: 10px 8px; font-size: 0.9rem; }
-    .table-avatar { width: 35px; height: 35px; }
-    
-    /* 這裡必須完整寫出，不能用省略 */
     .avatar-grid { gap: 8px; }
     .avatar-wrapper { width: 55px; }
     .avatar-option { width: 45px; height: 45px; }
     .avatar-name { font-size: 0.8rem; }
+
+    /* ---- 表格變身卡片魔法區 ---- */
+    
+    /* 1. 讓表格元素變成區塊元素 */
+    table, thead, tbody, th, td, tr { 
+        display: block; 
+    }
+    
+    /* 2. 隱藏表頭 (因為卡片不需要表頭) */
+    thead { display: none; }
+    
+    /* 3. 設定卡片外觀 (每一列變成一張卡片) */
+    tbody tr {
+        background-color: #fff;
+        border: 3px solid var(--baby-blue);
+        border-radius: 20px;
+        margin-bottom: 15px;
+        padding: 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column; /* 垂直排列 */
+        align-items: center; /* 內容置中 */
+        position: relative;
+    }
+
+    /* 4. 設定每個儲存格的樣式 */
+    td {
+        border: none !important; /* 移除原本表格線 */
+        padding: 5px 0;
+        width: 100%;
+        text-align: center;
+        border-radius: 0 !important;
+    }
+
+    /* 5. 重新排列順序與樣式微調 */
+    
+    /* 頭貼 (放最上面) */
+    td:nth-child(1) { order: 1; }
+    
+    /* 使用者名稱 */
+    td:nth-child(4) { 
+        order: 2; 
+        font-size: 1.1rem; 
+        color: var(--text-dark);
+        margin-bottom: 5px;
+    }
+    
+    /* 美食名稱 (放大、加虛線框) */
+    td:nth-child(5) { 
+        order: 3; 
+        font-size: 1.3rem; 
+        margin: 10px 0; 
+        border-top: 2px dashed var(--bg-cream) !important; 
+        border-bottom: 2px dashed var(--bg-cream) !important; 
+        padding: 10px 0; 
+        width: 100%;
+    }
+    
+    /* 稀有度 (放下面) */
+    td:nth-child(2) { order: 4; display: inline-block; width: auto; }
+    
+    /* 日期 (放最下面，變灰色) */
+    td:nth-child(3) { 
+        order: 5; 
+        font-size: 0.8rem; 
+        color: #999; 
+        margin-top: 5px;
+    }
+    
+    .table-avatar { width: 60px; height: 60px; }
 }
