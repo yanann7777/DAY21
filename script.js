@@ -1,18 +1,15 @@
 // ==========================================
 // 1. 吉伊卡哇角色與美食資料
 // ==========================================
-
-// 角色列表 (使用不同底色代表該角色)
-// 為了避免版權圖連結失效，這裡使用 Placehold.co 生成對應顏色的示意圖
-// 您可以將 image 的網址換成您電腦裡的圖片路徑或真實網址
+// 這裡使用 Placehold.co 產生示意圖，您可以換成真實圖片連結
 const chiikawaChars = [
-    { id: 'chiikawa', name: '小可愛', color: '#FFFFFF', image: 'https://www.popdaily.com.tw/shaper/u/202409/a295268a-c228-418e-a4df-e059b7538ea9.png?resize-w=1300&resize-h=1300&format=webp' }, // 白底粉字
-    { id: 'hachi', name: '小八', color: '#87CEEB', image: 'https://www.popdaily.com.tw/shaper/u/202409/fd4138c3-7bc4-483e-b54d-06d493792db6.png?resize-w=1300&resize-h=1300&format=webp' },    // 藍底白字
-    { id: 'usagi', name: '兔兔', color: '#FFFACD', image: 'https://www.popdaily.com.tw/shaper/u/202409/f7984971-9f2d-4ccf-963f-7cc7acfec817.png?resize-w=1300&resize-h=1300&format=webp' },    // 黃底金字
-    { id: 'momonga', name: '小桃', color: '#E0FFFF', image: 'https://www.popdaily.com.tw/shaper/u/202409/9fd5d003-ac74-4eca-b6b0-5817e26ebc4c.png?resize-w=1300&resize-h=1300&format=webp' },   // 淺青底
-    { id: 'kurimanju', name: '栗子', color: '#DEB887', image: 'https://www.popdaily.com.tw/shaper/u/202409/c165f1b6-31ec-4d58-b6be-aae4a912499b.png?resize-w=1300&resize-h=1300&format=webp' },  // 栗色
-    { id: 'rakko', name: '海獺', color: '#8B4513', image: 'https://www.popdaily.com.tw/shaper/u/202409/f37ba11a-92ae-4d3f-9f82-4aa947c35421.png?resize-w=1300&resize-h=1300&format=webp' },    // 深褐底
-    { id: 'anoko', name: '那孩子', color: '#D3D3D3', image: 'https://www.popdaily.com.tw/shaper/u/202409/b2664bda-46c6-4506-9a9d-ef214a7da9da.png?resize-w=1300&resize-h=1300&format=webp' }   // 灰底
+    { id: 'chiikawa', name: '小可愛', color: '#FFFFFF', image: 'https://placehold.co/100x100/FFFFFF/FF69B4?text=小可愛' },
+    { id: 'hachi', name: '小八', color: '#87CEEB', image: 'https://placehold.co/100x100/87CEEB/FFFFFF?text=小八' },
+    { id: 'usagi', name: '兔兔', color: '#FFFACD', image: 'https://placehold.co/100x100/FFFACD/DAA520?text=兔兔' },
+    { id: 'momonga', name: '小桃', color: '#E0FFFF', image: 'https://placehold.co/100x100/E0FFFF/008080?text=小桃' },
+    { id: 'kurimanju', name: '栗子', color: '#DEB887', image: 'https://placehold.co/100x100/DEB887/8B4513?text=栗子' },
+    { id: 'rakko', name: '海獺', color: '#8B4513', image: 'https://placehold.co/100x100/8B4513/FFFFFF?text=海獺' },
+    { id: 'anoko', name: '那孩子', color: '#D3D3D3', image: 'https://placehold.co/100x100/D3D3D3/000000?text=那孩子' }
 ];
 
 const poolSSR = [
@@ -40,60 +37,53 @@ const clearBtn = document.getElementById('clearBtn');
 const resultBody = document.getElementById('resultBody');
 const overlay = document.getElementById('gachaOverlay');
 const avatarGrid = document.getElementById('avatarGrid');
-const STORAGE_KEY = 'gacha_lunch_chiikawa_v1';
+const STORAGE_KEY = 'gacha_lunch_chiikawa_v2'; // 更新 key 避免舊邏輯干擾
 
 // 頁面載入執行
-window.addEventListener('load', () => {
-    initAvatars(); // 產生頭貼選項
-    loadHistory(); // 載入歷史紀錄
+window.addEventListener('load', function() {
+    initAvatars(); 
+    loadHistory(); 
 });
 
 // ==========================================
-// 3. 頭貼選擇邏輯 (含名字顯示)
+// 3. 頭貼選擇邏輯 (含名字顯示版)
 // ==========================================
 function initAvatars() {
     if (!avatarGrid) return;
     avatarGrid.innerHTML = '';
     
     chiikawaChars.forEach(function(char, index) {
-        // 1. 建立外層容器 (Wrapper)
+        // 建立容器
         const wrapper = document.createElement('div');
         wrapper.className = 'avatar-wrapper';
         
-        // 2. 建立圖片 (Image)
+        // 建立圖片
         const img = document.createElement('img');
         img.src = char.image;
         img.className = 'avatar-option';
-        // img.title 已經不需要了，因為直接顯示文字了
         
-        // 3. 建立名字標籤 (Name Label)
+        // 建立名字
         const nameSpan = document.createElement('span');
         nameSpan.textContent = char.name;
         nameSpan.className = 'avatar-name';
 
-        // 4. 預設選中第一個
+        // 預設選中第一個
         if (index === 0) {
             wrapper.classList.add('selected');
             const hiddenInput = document.getElementById('selectedAvatar');
             if(hiddenInput) hiddenInput.value = char.image;
         }
 
-        // 5. 點擊事件 (綁定在 Wrapper 上)
+        // 點擊事件
         wrapper.addEventListener('click', function() {
-            // 移除所有人的 selected 樣式
             document.querySelectorAll('.avatar-wrapper').forEach(function(el) {
                 el.classList.remove('selected');
             });
-            
-            // 自己加上 selected
             wrapper.classList.add('selected');
-            
-            // 更新隱藏欄位的值
             const hiddenInput = document.getElementById('selectedAvatar');
             if(hiddenInput) hiddenInput.value = char.image;
         });
 
-        // 6. 組裝並加入畫面
         wrapper.appendChild(img);
         wrapper.appendChild(nameSpan);
         avatarGrid.appendChild(wrapper);
@@ -106,7 +96,7 @@ function initAvatars() {
 function startGacha() {
     const nameInput = document.getElementById('username').value;
     const genderInput = document.querySelector('input[name="gender"]:checked');
-    const avatarSrc = document.getElementById('selectedAvatar').value;
+    const avatarSrcInput = document.getElementById('selectedAvatar');
 
     if (nameInput.trim() === "") {
         alert("請輸入召喚師名字！");
@@ -119,7 +109,8 @@ function startGacha() {
     
     // 機率判定
     const rand = Math.random() * 100;
-    let selectedFood = "", selectedRarity = "";
+    let selectedFood = "";
+    let selectedRarity = "";
 
     if (rand >= 95) { 
         selectedRarity = "SSR"; selectedFood = poolSSR[Math.floor(Math.random() * poolSSR.length)];
@@ -130,17 +121,61 @@ function startGacha() {
     }
 
     // 動畫等待
-    setTimeout(() => {
+    setTimeout(function() {
         overlay.classList.add('hidden');
         drawBtn.disabled = false;
         
-        handleData(nameInput, genderInput.value, avatarSrc, selectedRarity, selectedFood);
+        // 呼叫資料處理
+        handleData(
+            nameInput, 
+            genderInput ? genderInput.value : 'boy', 
+            avatarSrcInput ? avatarSrcInput.value : chiikawaChars[0].image, 
+            selectedRarity, 
+            selectedFood
+        );
     }, 2000);
 }
 
 // ==========================================
-// 5. 資料處理與渲染 (完整顯示版)
+// 5. 資料處理與渲染 (保證每筆都顯示)
 // ==========================================
+function handleData(name, gender, avatar, rarity, food) {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    
+    const yyyy = tomorrow.getFullYear();
+    const mm = (tomorrow.getMonth() + 1).toString().padStart(2, '0');
+    const dd = tomorrow.getDate().toString().padStart(2, '0');
+    const days = ['日', '一', '二', '三', '四', '五', '六'];
+    const dayName = days[tomorrow.getDay()];
+    
+    const fullDateStr = `${yyyy}/${mm}/${dd} (週${dayName})`;
+
+    const newRecord = {
+        rarity: rarity,
+        fullDate: fullDateStr,
+        username: name,
+        gender: gender,
+        avatar: avatar,
+        food: food
+    };
+
+    saveToStorage(newRecord);
+    loadHistory(); // 重新讀取顯示
+}
+
+function saveToStorage(newRecord) {
+    let history = [];
+    try {
+        history = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    } catch(e) { history = []; }
+    
+    // 【關鍵】這裡沒有 filter，直接加到最前面
+    history.unshift(newRecord);
+    
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+}
 
 function loadHistory() {
     const savedData = localStorage.getItem(STORAGE_KEY);
@@ -150,47 +185,40 @@ function loadHistory() {
         try {
             const arr = JSON.parse(savedData);
             if (arr.length > 0) {
-                // 這裡移除了 lastDate 和 lastName 的變數，因為不需要比對了
-
+                // 這裡沒有任何隱藏重複的邏輯，會逐筆顯示
                 arr.forEach(function(record) {
                     const row = document.createElement('tr');
                     
-                    // --- 修改重點：不再隱藏重複資料 ---
-                    // 直接讀取每一筆的資料，不留白
-                    let displayDate = record.fullDate;
-                    let displayName = record.username;
-                    
-                    // 確保有頭貼 (相容舊資料)
-                    let avatarUrl = record.avatar || 'https://placehold.co/100x100/ddd/888?text=?';
-                    let displayAvatar = `<img src="${avatarUrl}" class="table-avatar">`;
+                    // 頭貼
+                    const avatarImg = `<img src="${record.avatar}" class="table-avatar">`;
 
-                    // 性別符號
+                    // 性別
                     let genderIcon = "";
                     if(record.gender === "boy") genderIcon = "♂️";
                     else if(record.gender === "girl") genderIcon = "♀️";
                     else if(record.gender === "other") genderIcon = "🌈";
 
-                    // 稀有度樣式
+                    // 稀有度
                     const rarityBadge = `<span class="tag tag-${record.rarity}">${record.rarity}</span>`;
                     
-                    // 美食文字樣式
+                    // 美食樣式
                     let foodStyle = "";
                     if (record.rarity === "SSR") foodStyle = "color: #ff69b4; font-weight:800; text-shadow: 1px 1px 0 #fff;";
                     else if (record.rarity === "SR") foodStyle = "color: #ff9f43; font-weight:800;";
 
-                    // 填入 HTML
+                    // 每一行都完整填入
                     row.innerHTML = `
-                        <td>${displayAvatar}</td>
+                        <td>${avatarImg}</td>
                         <td>${rarityBadge}</td>
-                        <td>${displayDate}</td>
-                        <td>${displayName} ${genderIcon}</td>
+                        <td>${record.fullDate}</td>
+                        <td>${record.username} ${genderIcon}</td>
                         <td style="${foodStyle}">${record.food}</td>
                     `;
                     
                     resultBody.appendChild(row);
                 });
                 
-                // 幫第一行加上動畫效果
+                // 動畫
                 const firstRow = resultBody.querySelector('tr');
                 if(firstRow) firstRow.classList.add('new-row');
                 return;
@@ -198,8 +226,20 @@ function loadHistory() {
         } catch(e) { console.error(e); }
     }
     
-    // 無資料時的顯示
+    // 空狀態
     resultBody.innerHTML = '<tr id="placeholderRow"><td colspan="5" class="empty-state">還沒有召喚紀錄捏... ( •̀ ω •́ )✧</td></tr>';
 }
 
-drawBtn.addEventListener('click', startGacha);
+// 綁定事件
+if(clearBtn) {
+    clearBtn.addEventListener('click', function() {
+        if(confirm("確定要清除本本嗎？")) {
+            localStorage.removeItem(STORAGE_KEY);
+            loadHistory();
+        }
+    });
+}
+
+if(drawBtn) {
+    drawBtn.addEventListener('click', startGacha);
+}
