@@ -139,107 +139,67 @@ function startGacha() {
 }
 
 // ==========================================
-// 5. 資料處理與渲染
+// 5. 資料處理與渲染 (完整顯示版)
 // ==========================================
-function handleData(name, gender, avatar, rarity, food) {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-    
-    const dateStr = `${tomorrow.getFullYear()}/${(tomorrow.getMonth()+1).toString().padStart(2,'0')}/${tomorrow.getDate().toString().padStart(2,'0')}`;
-    const days = ['日', '一', '二', '三', '四', '五', '六'];
-    const fullDateStr = `${dateStr} (週${days[tomorrow.getDay()]})`;
-
-    const newRecord = {
-        rarity: rarity,
-        fullDate: fullDateStr,
-        username: name,
-        gender: gender, // 新欄位: 性別
-        avatar: avatar, // 新欄位: 頭貼圖片網址
-        food: food
-    };
-
-    saveToStorage(newRecord);
-    loadHistory();
-}
-
-function saveToStorage(newRecord) {
-    let history = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    history.unshift(newRecord);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
-}
 
 function loadHistory() {
     const savedData = localStorage.getItem(STORAGE_KEY);
     resultBody.innerHTML = ''; 
 
     if (savedData) {
-        const arr = JSON.parse(savedData);
-        if (arr.length > 0) {
-            
-            let lastDate = null;
-            let lastName = null;
+        try {
+            const arr = JSON.parse(savedData);
+            if (arr.length > 0) {
+                // 這裡移除了 lastDate 和 lastName 的變數，因為不需要比對了
 
-            arr.forEach(record => {
-                const row = document.createElement('tr');
+                arr.forEach(function(record) {
+                    const row = document.createElement('tr');
+                    
+                    // --- 修改重點：不再隱藏重複資料 ---
+                    // 直接讀取每一筆的資料，不留白
+                    let displayDate = record.fullDate;
+                    let displayName = record.username;
+                    
+                    // 確保有頭貼 (相容舊資料)
+                    let avatarUrl = record.avatar || 'https://placehold.co/100x100/ddd/888?text=?';
+                    let displayAvatar = `<img src="${avatarUrl}" class="table-avatar">`;
+
+                    // 性別符號
+                    let genderIcon = "";
+                    if(record.gender === "boy") genderIcon = "♂️";
+                    else if(record.gender === "girl") genderIcon = "♀️";
+                    else if(record.gender === "other") genderIcon = "🌈";
+
+                    // 稀有度樣式
+                    const rarityBadge = `<span class="tag tag-${record.rarity}">${record.rarity}</span>`;
+                    
+                    // 美食文字樣式
+                    let foodStyle = "";
+                    if (record.rarity === "SSR") foodStyle = "color: #ff69b4; font-weight:800; text-shadow: 1px 1px 0 #fff;";
+                    else if (record.rarity === "SR") foodStyle = "color: #ff9f43; font-weight:800;";
+
+                    // 填入 HTML
+                    row.innerHTML = `
+                        <td>${displayAvatar}</td>
+                        <td>${rarityBadge}</td>
+                        <td>${displayDate}</td>
+                        <td>${displayName} ${genderIcon}</td>
+                        <td style="${foodStyle}">${record.food}</td>
+                    `;
+                    
+                    resultBody.appendChild(row);
+                });
                 
-                // 視覺優化: 重複日期/名字留白
-                let displayDate = record.fullDate;
-                let displayName = record.username;
-                let displayAvatar = `<img src="${record.avatar}" class="table-avatar">`; // 預設顯示圖片
-
-                if (record.fullDate === lastDate) {
-                    displayDate = "";
-                }
-
-                // 如果日期相同且名字相同，名字和頭貼都隱藏
-                if (record.username === lastName && record.fullDate === lastDate) {
-                    displayName = "";
-                    displayAvatar = ""; 
-                }
-
-                lastDate = record.fullDate;
-                lastName = record.username;
-
-                // 性別符號
-                let genderIcon = "";
-                if(record.gender === "boy") genderIcon = "♂️";
-                else if(record.gender === "girl") genderIcon = "♀️";
-                else genderIcon = "🌈";
-
-                // 稀有度與樣式
-                const rarityBadge = `<span class="tag tag-${record.rarity}">${record.rarity}</span>`;
-                let foodStyle = "";
-                if (record.rarity === "SSR") foodStyle = "color: #ff69b4; font-weight:800; text-shadow: 1px 1px 0 #fff;";
-                else if (record.rarity === "SR") foodStyle = "color: #ff9f43; font-weight:800;";
-
-                // 組合 HTML (新增了頭貼欄位)
-                row.innerHTML = `
-                    <td>${displayAvatar}</td>
-                    <td>${rarityBadge}</td>
-                    <td>${displayDate}</td>
-                    <td>${displayName} ${displayName ? genderIcon : ''}</td>
-                    <td style="${foodStyle}">${record.food}</td>
-                `;
-                
-                resultBody.appendChild(row);
-            });
-            
-            // 加上新資料動畫
-            const firstRow = resultBody.querySelector('tr');
-            if(firstRow) firstRow.classList.add('new-row');
-            return;
-        }
+                // 幫第一行加上動畫效果
+                const firstRow = resultBody.querySelector('tr');
+                if(firstRow) firstRow.classList.add('new-row');
+                return;
+            }
+        } catch(e) { console.error(e); }
     }
     
+    // 無資料時的顯示
     resultBody.innerHTML = '<tr id="placeholderRow"><td colspan="5" class="empty-state">還沒有召喚紀錄捏... ( •̀ ω •́ )✧</td></tr>';
 }
-
-clearBtn.addEventListener('click', () => {
-    if(confirm("確定要清除本本嗎？")) {
-        localStorage.removeItem(STORAGE_KEY);
-        loadHistory();
-    }
-});
 
 drawBtn.addEventListener('click', startGacha);
