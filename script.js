@@ -49,33 +49,54 @@ window.addEventListener('load', () => {
 });
 
 // ==========================================
-// 3. 頭貼選擇邏輯
+// 3. 頭貼選擇邏輯 (含名字顯示)
 // ==========================================
 function initAvatars() {
+    if (!avatarGrid) return;
     avatarGrid.innerHTML = '';
-    chiikawaChars.forEach((char, index) => {
+    
+    chiikawaChars.forEach(function(char, index) {
+        // 1. 建立外層容器 (Wrapper)
+        const wrapper = document.createElement('div');
+        wrapper.className = 'avatar-wrapper';
+        
+        // 2. 建立圖片 (Image)
         const img = document.createElement('img');
         img.src = char.image;
         img.className = 'avatar-option';
-        img.title = char.name; // 滑鼠懸停顯示名字
+        // img.title 已經不需要了，因為直接顯示文字了
         
-        // 預設選中第一個
+        // 3. 建立名字標籤 (Name Label)
+        const nameSpan = document.createElement('span');
+        nameSpan.textContent = char.name;
+        nameSpan.className = 'avatar-name';
+
+        // 4. 預設選中第一個
         if (index === 0) {
-            img.classList.add('selected');
-            document.getElementById('selectedAvatar').value = char.image;
+            wrapper.classList.add('selected');
+            const hiddenInput = document.getElementById('selectedAvatar');
+            if(hiddenInput) hiddenInput.value = char.image;
         }
 
-        // 點擊事件
-        img.addEventListener('click', () => {
-            // 移除其他人的 selected 樣式
-            document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+        // 5. 點擊事件 (綁定在 Wrapper 上)
+        wrapper.addEventListener('click', function() {
+            // 移除所有人的 selected 樣式
+            document.querySelectorAll('.avatar-wrapper').forEach(function(el) {
+                el.classList.remove('selected');
+            });
+            
             // 自己加上 selected
-            img.classList.add('selected');
+            wrapper.classList.add('selected');
+            
             // 更新隱藏欄位的值
-            document.getElementById('selectedAvatar').value = char.image;
+            const hiddenInput = document.getElementById('selectedAvatar');
+            if(hiddenInput) hiddenInput.value = char.image;
         });
 
-        avatarGrid.appendChild(img);
+        // 6. 組裝並加入畫面
+        wrapper.appendChild(img);
+        wrapper.appendChild(nameSpan);
+        avatarGrid.appendChild(wrapper);
     });
 }
 
